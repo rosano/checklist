@@ -4,9 +4,9 @@ const todos = {
     privateClient.declareType('todo', {
       type: 'object',
       properties: {
-        name: { type: 'string' },
+        description: { type: 'string' },
       },
-      required: ['name'],
+      required: ['description'],
     });
 
     return {
@@ -15,9 +15,9 @@ const todos = {
 
         on: privateClient.on,
 
-        addTodo: (name) => privateClient.storeObject('todo', `${ new Date().getTime() }`, { name }),
+        addTodo: (description) => privateClient.storeObject('todo', `${ new Date().getTime() }`, { description }),
 
-        updateTodo: (id, name) => privateClient.storeObject('todo', id, { name }),
+        updateTodo: (id, description) => privateClient.storeObject('todo', id, { description }),
 
         removeTodo: privateClient.remove.bind(privateClient),
 

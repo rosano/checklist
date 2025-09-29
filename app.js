@@ -13,7 +13,7 @@ remoteStorage.todos.on('change', (event) => {
   if (typeof event.newValue === 'object' && typeof event.oldValue !== 'object') {
     console.log(`Change from ${ event.origin } (add)`, event);
 
-    mod.displayTodo(event.relativePath, event.newValue.name);
+    mod.displayTodo(event.relativePath, event.newValue.description);
   } else if (typeof event.newValue !== 'object' && typeof event.oldValue === 'object') {
     console.log(`Change from ${ event.origin } (remove)`, event);
 
@@ -21,11 +21,11 @@ remoteStorage.todos.on('change', (event) => {
   } else if (typeof event.newValue === 'object' && typeof event.oldValue === 'object') {
     console.log(`Change from ${ event.origin } (change)`, event);
 
-    if (event.origin !== 'conflict' || (event.oldValue.name === event.newValue.name)) {
+    if (event.origin !== 'conflict' || (event.oldValue.description === event.newValue.description)) {
       mod.renderTodos();
     } else {
-      const name = `${event.oldValue.name} / ${event.newValue.name} (was ${event.lastCommonValue.name})`;
-      mod.updateTodo(event.relativePath, name).then(mod.renderTodos);
+      const description = `${event.oldValue.description} / ${event.newValue.description} (was ${event.lastCommonValue.description})`;
+      mod.updateTodo(event.relativePath, description).then(mod.renderTodos);
     }
   } else {
     console.log(`Change from ${ event.origin }`, event);
@@ -35,9 +35,9 @@ remoteStorage.todos.on('change', (event) => {
 // app interface
 const mod = {
 
-  addTodo: (name) => remoteStorage.todos.addTodo(name),
+  addTodo: (description) => remoteStorage.todos.addTodo(description),
 
-  updateTodo: (id, name) => remoteStorage.todos.updateTodo(id, name),
+  updateTodo: (id, description) => remoteStorage.todos.updateTodo(id, description),
 
   removeTodo: (id) => remoteStorage.todos.removeTodo(id),
 
@@ -47,11 +47,11 @@ const mod = {
     document.querySelector('#todo-list').innerHTML = '';
 
     for (const id in todos) {
-      mod.displayTodo(id, todos[id].name);
+      mod.displayTodo(id, todos[id].description);
     }
   },
 
-  displayTodo (id, name) {
+  displayTodo (id, description) {
     let li = mod.liForID(id);
 
     if (!li) {
@@ -61,7 +61,7 @@ const mod = {
     }
 
     li.innerHTML += `<form>
-      <input type="text" value="${ name }" placeholder="name">
+      <input type="text" value="${ description }" placeholder="description">
       <button class="save">Save</button>
       <a class="delete button" title="Delete" href="#">×</a>
     </form>`;
