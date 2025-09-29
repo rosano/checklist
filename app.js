@@ -1,158 +1,122 @@
-(function() {
-  let inputElement;
-  let formElement;
-  let ulElement;
-  const itemPrefix = 'item-';
+// remoteStorage module
+const remoteStorage = new RemoteStorage({
+  modules: [todos],
+  changeEvents: { local: true, window: true, remote: true, conflict: true },
+});
 
-  const remoteStorage = new RemoteStorage({
-    logging: true,
-    changeEvents: { local: true, window: true, remote: true, conflict: true },
-    modules: [MyFavoriteDrinks]
+remoteStorage.access.claim('todos', 'rw');
+
+remoteStorage.todos.cacheTodos();
+
+// remoteStorage events
+remoteStorage.todos.on('change', (event) => {
+  if (typeof event.newValue === 'object' && typeof event.oldValue !== 'object') {
+    console.log(`Change from ${ event.origin } (add)`, event);
+
+    mod.displayTodo(event.relativePath, event.newValue.name);
+  } else if (typeof event.newValue !== 'object' && typeof event.oldValue === 'object') {
+    console.log(`Change from ${ event.origin } (remove)`, event);
+
+    mod.undisplayTodo(event.relativePath);
+  } else if (typeof event.newValue === 'object' && typeof event.oldValue === 'object') {
+    console.log(`Change from ${ event.origin } (change)`, event);
+
+    if (event.origin !== 'conflict' || (event.oldValue.name === event.newValue.name)) {
+      mod.renderTodos();
+    } else {
+      const name = `${event.oldValue.name} / ${event.newValue.name} (was ${event.lastCommonValue.name})`;
+      mod.updateTodo(event.relativePath, name).then(mod.renderTodos);
+    }
+  } else {
+    console.log(`Change from ${ event.origin }`, event);
+  }
+});
+
+// app interface
+const mod = {
+
+  addTodo: (name) => remoteStorage.todos.addTodo(name),
+
+  updateTodo: (id, name) => remoteStorage.todos.updateTodo(id, name),
+
+  removeTodo: (id) => remoteStorage.todos.removeTodo(id),
+
+  renderTodos: () => remoteStorage.todos.getAllTodos().then(mod.displayTodos),
+
+  displayTodos (todos) {
+    document.querySelector('#todo-list').innerHTML = '';
+
+    for (const id in todos) {
+      mod.displayTodo(id, todos[id].name);
+    }
+  },
+
+  displayTodo (id, name) {
+    let li = mod.liForID(id);
+
+    if (!li) {
+      li = document.createElement('li');
+      li.dataset.id = id;
+      document.querySelector('#todo-list').appendChild(li);
+    }
+
+    li.innerHTML += `<form>
+      <input type="text" value="${ name }" placeholder="name">
+      <button class="save">Save</button>
+      <a class="delete button" title="Delete" href="#">×</a>
+    </form>`;
+    
+    const save = li.querySelector('button.save');
+    const input = li.querySelector('input');
+
+    input.addEventListener('focus', () => save.style.visibility = 'visible');
+    
+    input.addEventListener('blur', () => {
+      setTimeout(() => save.style.visibility = 'hidden', 100)
+    });
+
+    li.querySelector('form').addEventListener('submit', () => mod.updateTodo(id, input.value));
+
+    save.addEventListener('click', () => {
+      mod.updateTodo(id, input.value);
+    });
+
+    li.querySelector('a.delete').addEventListener('click', (event) => {
+      event.preventDefault();
+
+      mod.removeTodo(li.dataset.id);
+    });
+  },
+
+  undisplayTodo: (id) => document.querySelector('#todo-list').removeChild(mod.liForID(id)),
+
+  emptyTodos () {
+    document.querySelector('#todo-list').innerHTML = '';
+    document.querySelector('#add-todo input').value = '';
+  },
+
+  liForID: (id) => document.querySelector(`#todo-list li[data-id="${ id }"]`),
+
+};
+
+// Setup after page loads
+document.addEventListener('DOMContentLoaded', () => {
+
+  (new Widget(remoteStorage)).attach('widget-wrapper');
+
+  remoteStorage.on('ready', () => {
+    document.getElementById('add-todo').addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const text = document.querySelector('#add-todo input').value.trim();
+      if (text) {
+        mod.addTodo(text);
+      }
+
+      document.querySelector('#add-todo input').value = '';
+    });
   });
 
-  // Claim read/write access for the /myfavoritedrinks category
-  remoteStorage.access.claim('myfavoritedrinks', 'rw');
-
-  // Add RemoteStorage and BaseClient instances to window for easy console
-  // access
-  window.remoteStorage = remoteStorage;
-  window.baseClient    = remoteStorage.scope("/myfavoritedrinks/")
-
-  function prefixId(id) {
-    return itemPrefix + id;
-  }
-
-  function unprefixId(prefixedId) {
-    return prefixedId.replace(itemPrefix, '');
-  }
-
-  function init() {
-    formElement = document.getElementById('add-drink');
-    inputElement = formElement.getElementsByTagName('input')[0];
-    ulElement = document.getElementById('drink-list');
-
-    // Display the RS connect widget
-    const widget = new Widget(remoteStorage);
-    widget.attach('widget-wrapper');
-
-    // Enable caching
-    remoteStorage.myfavoritedrinks.init();
-
-    remoteStorage.myfavoritedrinks.on('change', (event) => {
-      if (typeof event.newValue === 'object' && typeof event.oldValue !== 'object') {
-        console.log('Change from '+event.origin+' (add)', event);
-        displayDrink(event.relativePath, event.newValue.name);
-      }
-      else if (typeof event.newValue !== 'object' && typeof event.oldValue === 'object') {
-        console.log('Change from '+event.origin+' (remove)', event);
-        undisplayDrink(event.relativePath);
-      }
-      else if (typeof event.newValue === 'object' && typeof event.oldValue === 'object') {
-        console.log('Change from '+event.origin+' (change)', event);
-        if (event.origin !== 'conflict' || (event.oldValue.name === event.newValue.name)) {
-          renderDrinks();
-        } else {
-          const name = `${event.oldValue.name} / ${event.newValue.name} (was ${event.lastCommonValue.name})`;
-          updateDrink(event.relativePath, name).then(renderDrinks);
-        }
-      } else {
-        console.log('Change from '+event.origin+'', event);
-      }
-    });
-
-    remoteStorage.on('ready', function() {
-      ulElement.addEventListener('click', function(event) {
-        if (
-          event.target.tagName === 'BUTTON' &&
-          event.target.classList.contains('delete')
-        ) {
-          removeDrink(unprefixId(event.target.parentNode.id));
-        }
-      });
-
-      formElement.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const trimmedText = inputElement.value.trim();
-        if (trimmedText) {
-          addDrink(trimmedText);
-        }
-        inputElement.value = '';
-      });
-    });
-
-    remoteStorage.on('disconnected', function() {
-      emptyDrinks();
-    });
-  }
-
-  function addDrink(name) {
-    remoteStorage.myfavoritedrinks.addDrink(name);
-  }
-
-  function updateDrink(id, name) {
-    return remoteStorage.myfavoritedrinks.updateDrink(id, name);
-  }
-
-  function removeDrink(id) {
-    remoteStorage.myfavoritedrinks.removeDrink(id);
-  }
-
-  function renderDrinks() {
-    remoteStorage.myfavoritedrinks.getAllDrinks().then(drinks => {
-      displayDrinks(drinks);
-    });
-  }
-
-  function displayDrinks(drinks) {
-    ulElement.innerHTML = '';
-    for (const drinkId in drinks) {
-      displayDrink(drinkId, drinks[drinkId].name);
-    }
-  }
-
-  function displayDrink(id, name) {
-    const domID = prefixId(id);
-    let liElement = document.getElementById(domID);
-    if (!liElement) {
-      liElement = document.createElement('li');
-      liElement.id = domID;
-      ulElement.appendChild(liElement);
-    }
-    liElement.innerHTML += `
-      <input type="text" value="${name}" placeholder="Drink name">
-      <button class="save" title="Save">Save</button>
-      <button class="delete" title="Delete">×</button>
-    `;
-    const saveButton = liElement.querySelector('button.save');
-    const inputEl = liElement.querySelector('input');
-    inputEl.addEventListener("focus", () => {
-      saveButton.style.visibility = 'visible';
-    });
-    inputEl.addEventListener("blur", () => {
-      setTimeout(() => {
-        saveButton.style.visibility = 'hidden';
-      }, 100)
-    });
-    inputEl.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') {
-        updateDrink(id, inputEl.value);
-      }
-    });
-    saveButton.addEventListener("click", () => {
-      updateDrink(unprefixId(domID), inputEl.value);
-    });
-  }
-
-  function undisplayDrink(id) {
-    const elem = document.getElementById(prefixId(id));
-    ulElement.removeChild(elem);
-  }
-
-  function emptyDrinks() {
-    ulElement.innerHTML = '';
-    inputElement.value = '';
-  }
-
-  document.addEventListener('DOMContentLoaded', init);
-
-})();
+  remoteStorage.on('disconnected', mod.emptyTodos);
+  
+});

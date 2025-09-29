@@ -2,32 +2,33 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>My Favorite Drinks (RS Example App)</title>
+	<title>Checklist</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="style.css">
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="512x512" href="/img/icon.png">
-  <link rel="icon" type="image/png" sizes="128x128" href="/img/icon-128px.png">
-  <link rel="icon" type="image/png" sizes="48x48" href="/img/icon-48px.png">
-  <link rel="apple-touch-icon" href="/img/icon.png">
-	<script src="remotestorage.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/remotestoragejs@latest/release/remotestorage.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/remotestorage-widget@latest/build/widget.js"></script>
 	<script src="remotestorage-module.js"></script>
-	<script src="widget.js"></script>
 	<script src="app.js"></script>
 </head>
 <body>
-  <div id="widget-wrapper"></div>
-	<div id="wrapper">
-		<h1>My Favorite Drinks</h1>
 
-		<form id="add-drink">
-			<input type="text" placeholder="Add a drink">
-      <button type="submit">Add</button>
-		</form>
+<div id="widget-wrapper"></div>
 
-		<ul id="drink-list"></ul>
+<app>
+	
+<header>
+	<h1>Checklist</h1>
+	<small>sample <a href="https://github.com/remotestorage/checklist">open-source</a> app with <a href="https://remotestorage.io">remoteStorage</a> integration</small>
+</header>
 
-		<p id="background-credit">picture by <a href="https://www.flickr.com/photos/138866094@N02/29600930613">Matheus Swanson</a></p>
-	</div>
+<form id="add-todo">
+	<input type="text" placeholder="Add a todo">
+  <button type="submit">Add</button>
+</form>
+
+<ul id="todo-list"></ul>
+
+</app>
+
 </body>
 </html>

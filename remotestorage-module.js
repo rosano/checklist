@@ -1,44 +1,27 @@
-const MyFavoriteDrinks = {
-  name: 'myfavoritedrinks',
-  builder: function(privateClient) {
-    privateClient.declareType('drink', {
+const todos = {
+  name: 'todos',
+  builder: function (privateClient) {
+    privateClient.declareType('todo', {
       type: 'object',
       properties: {
-        name: { type: 'string' }
+        name: { type: 'string' },
       },
-      required: ['name']
+      required: ['name'],
     });
 
     return {
       exports: {
-
-        init: function() {
-          privateClient.cache('');
-        },
+        cacheTodos: () => privateClient.cache(''),
 
         on: privateClient.on,
 
-        addDrink: function(name) {
-          const id = `${new Date().getTime()}`;
+        addTodo: (name) => privateClient.storeObject('todo', `${ new Date().getTime() }`, { name }),
 
-          return privateClient.storeObject('drink', id, {
-            name: name
-          });
-        },
+        updateTodo: (id, name) => privateClient.storeObject('todo', id, { name }),
 
-        updateDrink: function(id, name) {
-          return privateClient.storeObject('drink', id, {
-            name: name
-          });
-        },
+        removeTodo: privateClient.remove.bind(privateClient),
 
-        removeDrink: privateClient.remove.bind(privateClient),
-
-        getAllDrinks: function() {
-          return privateClient.getAll('', false).then(drinks => {
-            return Object.fromEntries(Object.entries(drinks).sort());
-          });
-        }
+        getAllTodos: () => privateClient.getAll('', false),
       }
     }
   }

@@ -3,7 +3,7 @@
 }
 
 html {
-  background: #000;
+  background: #111;
   height: 100%;
   font: normal 16px FreeSans, Helvetica, sans-serif;
 }
@@ -12,34 +12,42 @@ body {
   margin: 0;
   min-height: 100%;
   position: relative;
-  color: #fff;
-  background: url('/img/drink.jpg') no-repeat;
-  background-position: 100% 0;
-  background-size: contain;
-  background-attachment: fixed;
+  color: #eee;
+
+  display: flex;
+  justify-content: center;
 }
 
-#background {
-  width: 100%;
-  position: fixed;
-  top: -100px;
-  left: 0;
-  z-index: -1;
-}
-
-#wrapper {
-  width: 600px;
+app {
+  width: 525px;
   max-width: 100%;
-  padding: 50px;
+
+  background: #222;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 0;
+}
+
+small {
+  font-size: 0.9rem;
+  opacity: 0.6;
+  margin-bottom: 15px;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+app {
   margin: 0;
   font-size: 1.5rem;
 }
 
-#wrapper h1 {
-  font-size: 3rem;
-}
-
-#wrapper button {
+app button, .button {
   background: #333;
   color: #fff;
   border: 1px solid #444;
@@ -48,11 +56,11 @@ body {
   transition: background 0.1s ease;
 }
 
-#wrapper button:hover {
+app button:hover, .button:hover {
   background: #444;
 }
 
-#wrapper input[type=text] {
+app input[type=text] {
   height: 50px;
   padding: 0.2rem 0.8rem;
   font-size: 1.5rem;
@@ -64,38 +72,38 @@ body {
   transition: border-color 0.3s ease;
 }
 
-#wrapper input[type=text]:focus {
+app input[type=text]:focus {
   border-color: #888;
 }
 
-#add-drink {
+#add-todo {
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
 }
 
-#add-drink input {
+#add-todo input {
   flex-grow: 1;
 }
 
-#add-drink input::placeholder {
+#add-todo input::placeholder {
   color: #888;
 }
 
-#add-drink button {
+#add-todo button {
   width: 100px;
   height: 50px;
   padding: 0.2rem 0.8rem;
   font-size: 1.25rem;
 }
 
-ul#drink-list {
+ul#todo-list {
   list-style: none;
   padding-left: 0;
   margin-top: 2rem;
 }
 
-#drink-list li {
+#todo-list li form {
   position: relative;
   display: flex;
   flex-direction: row;
@@ -104,25 +112,25 @@ ul#drink-list {
   padding: 0.2rem 0;
 }
 
-#drink-list li:not(:last-child) {
+#todo-list li:not(:last-child) {
   border-bottom: 1px solid #333;
 }
 
-#drink-list li input[type=text] {
-  background: #000;
-  border-color: #000;
+#todo-list li input[type=text] {
+  background: #222;
+  border-color: #222;
   flex-grow: 1;
   flex-shrink: 1;
   width: 100%;
   max-width: 100%;
 }
 
-#drink-list li input[type=text]:focus {
+#todo-list li input[type=text]:focus {
   background: #1a1a1a;
   border-color: #888;
 }
 
-#drink-list button.save {
+#todo-list button.save {
   visibility: hidden;
   flex-grow: 0;
   flex-shrink: 0;
@@ -130,7 +138,7 @@ ul#drink-list {
   font-size: 1.25rem;
 }
 
-#drink-list button.delete {
+#todo-list a.delete {
   opacity: 0.5;
   width: 2rem;
   height: 2rem;
@@ -138,9 +146,15 @@ ul#drink-list {
   flex-shrink: 0;
   font-size: 1.25rem;
   margin-right: 0.8rem;
+
+  text-decoration: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-#drink-list button.delete:hover {
+#todo-list .delete:hover {
   opacity: 1;
 }
 
@@ -168,25 +182,25 @@ ul#drink-list {
     font-size: 12px;
   }
 
-  #wrapper h1 {
+  app h1 {
     font-size: 2.5rem;
   }
 
-  #wrapper {
-    padding: 6rem 1rem 0 1rem;
+  app {
+    padding-top: 6rem;
   }
 
-  #add-drink {
+  #add-todo {
     flex-direction: column;
     gap: 0.8rem;
     max-width: 100%;
   }
 
-  #add-drink input {
+  #add-todo input {
     width: 100%;
   }
 
-  #add-drink button {
+  #add-todo button {
     width: 100%;
   }
 
