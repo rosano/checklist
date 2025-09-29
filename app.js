@@ -1,6 +1,7 @@
 // remoteStorage module
 const remoteStorage = new RemoteStorage({
   modules: [todos],
+  logging: true,
   changeEvents: { local: true, window: true, remote: true, conflict: true },
 });
 
