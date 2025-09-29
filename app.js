@@ -75,7 +75,11 @@ const mod = {
       setTimeout(() => save.style.visibility = 'hidden', 100)
     });
 
-    li.querySelector('form').addEventListener('submit', () => mod.updateTodo(id, input.value));
+    li.querySelector('form').addEventListener('submit', () => {
+      event.preventDefault();
+
+      mod.updateTodo(id, input.value);
+    });
 
     save.addEventListener('click', () => {
       mod.updateTodo(id, input.value);
