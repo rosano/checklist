@@ -112,11 +112,11 @@ remoteStorage.todos.cacheTodos();
       liElement.id = domID;
       ulElement.appendChild(liElement);
     }
-    liElement.innerHTML += `
+    liElement.innerHTML += `<form>
       <input type="text" value="${description}" placeholder="Todo description">
-      <button class="save" title="Save">Save</button>
-      <button class="delete" title="Delete">×</button>
-    `;
+      <button class="save" title="Save" type="submit">Save</button>
+      <a class="delete" href="#" title="Delete">×</a>
+    </form>`;
     const saveButton = liElement.querySelector('button.save');
     const inputEl = liElement.querySelector('input');
     inputEl.addEventListener("focus", () => {
@@ -133,7 +133,7 @@ remoteStorage.todos.cacheTodos();
       }
     });
     saveButton.addEventListener("click", () => {
-      updateTodo(unprefixId(domID), inputEl.value);
+      updateTodo(id, inputEl.value);
     });
   }
 
