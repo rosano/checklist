@@ -76,10 +76,11 @@ const mod = {
       setTimeout(() => save.style.visibility = 'hidden', 100)
     });
 
-    li.querySelector('form').addEventListener('submit', () => {
-      event.preventDefault();
-
-      mod.updateTodo(id, input.value);
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault()
+        mod.updateTodo(id, input.value);
+      }
     });
 
     save.addEventListener('click', () => {
