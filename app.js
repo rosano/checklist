@@ -11,26 +11,30 @@ remoteStorage.todos.cacheTodos();
 
 // remoteStorage events
 remoteStorage.todos.on('change', (event) => {
-  if (typeof event.newValue === 'object' && typeof event.oldValue !== 'object') {
+  if (event.newValue && !event.oldValue) {
     console.log(`Change from ${ event.origin } (add)`, event);
 
-    mod.displayTodo(event.relativePath, event.newValue.description);
-  } else if (typeof event.newValue !== 'object' && typeof event.oldValue === 'object') {
+    return mod.displayTodo(event.relativePath, event.newValue.description);
+  }
+
+  if (!event.newValue && event.oldValue) {
     console.log(`Change from ${ event.origin } (remove)`, event);
 
-    mod.undisplayTodo(event.relativePath);
-  } else if (typeof event.newValue === 'object' && typeof event.oldValue === 'object') {
+    return mod.undisplayTodo(event.relativePath);
+  }
+
+  if (event.newValue && event.oldValue) {
     console.log(`Change from ${ event.origin } (change)`, event);
 
     if (event.origin !== 'conflict' || (event.oldValue.description === event.newValue.description)) {
-      mod.renderTodos();
-    } else {
-      const description = `${event.oldValue.description} / ${event.newValue.description} (was ${event.lastCommonValue.description})`;
-      mod.updateTodo(event.relativePath, description).then(mod.renderTodos);
+      return mod.renderTodos();
     }
-  } else {
-    console.log(`Change from ${ event.origin }`, event);
+
+    const description = `${event.oldValue.description} / ${event.newValue.description} (was ${event.lastCommonValue.description})`;
+    return mod.updateTodo(event.relativePath, description).then(mod.renderTodos);
   }
+
+  console.log(`Change from ${ event.origin }`, event);
 });
 
 // app interface
