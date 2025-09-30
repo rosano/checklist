@@ -11,9 +11,7 @@ const todos = {
 
     return {
       exports: {
-        init: function() {
-          privateClient.cache('');
-        },
+        cacheTodos: () => privateClient.cache(''),
 
         on: privateClient.on,
 

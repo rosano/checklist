@@ -1,22 +1,19 @@
+// remoteStorage module
+const remoteStorage = new RemoteStorage({
+  modules: [todos],
+  logging: true,
+  changeEvents: { local: true, window: true, remote: true, conflict: true },
+});
+
+remoteStorage.access.claim('todos', 'rw');
+
+remoteStorage.todos.cacheTodos();
+
 (function() {
   let inputElement;
   let formElement;
   let ulElement;
   const itemPrefix = 'item-';
-
-  const remoteStorage = new RemoteStorage({
-    logging: true,
-    changeEvents: { local: true, window: true, remote: true, conflict: true },
-    modules: [todos]
-  });
-
-  // Claim read/write access for the /todos category
-  remoteStorage.access.claim('todos', 'rw');
-
-  // Add RemoteStorage and BaseClient instances to window for easy console
-  // access
-  window.remoteStorage = remoteStorage;
-  window.baseClient    = remoteStorage.scope("/todos/")
 
   function prefixId(id) {
     return itemPrefix + id;
@@ -34,9 +31,6 @@
     // Display the RS connect widget
     const widget = new Widget(remoteStorage);
     widget.attach('widget-wrapper');
-
-    // Enable caching
-    remoteStorage.todos.init();
 
     remoteStorage.todos.on('change', (event) => {
       if (typeof event.newValue === 'object' && typeof event.oldValue !== 'object') {
