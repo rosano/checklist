@@ -1,12 +1,12 @@
-const MyFavoriteDrinks = {
-  name: 'myfavoritedrinks',
+const todos = {
+  name: 'todos',
   builder: function (privateClient) {
-    privateClient.declareType('drink', {
+    privateClient.declareType('todo', {
       type: 'object',
       properties: {
-        name: { type: 'string' },
+        description: { type: 'string' },
       },
-      required: ['name'],
+      required: ['description'],
     });
 
     return {
@@ -17,13 +17,13 @@ const MyFavoriteDrinks = {
 
         on: privateClient.on,
 
-        addDrink: (name) => privateClient.storeObject('drink', `${ new Date().getTime() }`, { name }),
+        addTodo: (description) => privateClient.storeObject('todo', `${ new Date().getTime() }`, { description }),
 
-        updateDrink: (id, name) => privateClient.storeObject('drink', id, { name }),
+        updateTodo: (id, description) => privateClient.storeObject('todo', id, { description }),
 
-        removeDrink: privateClient.remove.bind(privateClient),
+        removeTodo: privateClient.remove.bind(privateClient),
 
-        getAllDrinks: () => privateClient.getAll('', false),
+        getAllTodos: () => privateClient.getAll('', false),
       }
     }
   }

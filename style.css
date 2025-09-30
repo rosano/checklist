@@ -13,7 +13,7 @@ body {
   min-height: 100%;
   position: relative;
   color: #fff;
-  background: url('/img/drink.jpg') no-repeat;
+  background: url('/img/todo.jpg') no-repeat;
   background-position: 100% 0;
   background-size: contain;
   background-attachment: fixed;
@@ -68,34 +68,34 @@ body {
   border-color: #888;
 }
 
-#add-drink {
+#add-todo {
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
 }
 
-#add-drink input {
+#add-todo input {
   flex-grow: 1;
 }
 
-#add-drink input::placeholder {
+#add-todo input::placeholder {
   color: #888;
 }
 
-#add-drink button {
+#add-todo button {
   width: 100px;
   height: 50px;
   padding: 0.2rem 0.8rem;
   font-size: 1.25rem;
 }
 
-ul#drink-list {
+ul#todo-list {
   list-style: none;
   padding-left: 0;
   margin-top: 2rem;
 }
 
-#drink-list li {
+#todo-list li {
   position: relative;
   display: flex;
   flex-direction: row;
@@ -104,11 +104,11 @@ ul#drink-list {
   padding: 0.2rem 0;
 }
 
-#drink-list li:not(:last-child) {
+#todo-list li:not(:last-child) {
   border-bottom: 1px solid #333;
 }
 
-#drink-list li input[type=text] {
+#todo-list li input[type=text] {
   background: #000;
   border-color: #000;
   flex-grow: 1;
@@ -117,12 +117,12 @@ ul#drink-list {
   max-width: 100%;
 }
 
-#drink-list li input[type=text]:focus {
+#todo-list li input[type=text]:focus {
   background: #1a1a1a;
   border-color: #888;
 }
 
-#drink-list button.save {
+#todo-list button.save {
   visibility: hidden;
   flex-grow: 0;
   flex-shrink: 0;
@@ -130,7 +130,7 @@ ul#drink-list {
   font-size: 1.25rem;
 }
 
-#drink-list button.delete {
+#todo-list button.delete {
   opacity: 0.5;
   width: 2rem;
   height: 2rem;
@@ -140,7 +140,7 @@ ul#drink-list {
   margin-right: 0.8rem;
 }
 
-#drink-list button.delete:hover {
+#todo-list button.delete:hover {
   opacity: 1;
 }
 
@@ -176,17 +176,17 @@ ul#drink-list {
     padding: 6rem 1rem 0 1rem;
   }
 
-  #add-drink {
+  #add-todo {
     flex-direction: column;
     gap: 0.8rem;
     max-width: 100%;
   }
 
-  #add-drink input {
+  #add-todo input {
     width: 100%;
   }
 
-  #add-drink button {
+  #add-todo button {
     width: 100%;
   }
 
