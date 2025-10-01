@@ -10,7 +10,7 @@ remoteStorage.access.claim('todos', 'rw');
 remoteStorage.todos.cacheTodos();
 
 // remoteStorage events
-remoteStorage.todos.on('change', (event) => {
+remoteStorage.todos.handle('change', (event) => {
   if (event.newValue && !event.oldValue) {
     console.log(`Change from ${ event.origin } (add)`, event);
 

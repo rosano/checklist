@@ -13,7 +13,7 @@ const todos = {
       exports: {
         cacheTodos: () => privateClient.cache(''),
 
-        on: privateClient.on,
+        handle: privateClient.on,
 
         addTodo: (description) => privateClient.storeObject('todo', `${ new Date().getTime() }`, { description }),
 
