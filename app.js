@@ -30,8 +30,9 @@ remoteStorage.todos.handle('change', (event) => {
       return mod.renderTodos();
     }
 
-    const description = `${event.oldValue.description} / ${event.newValue.description} (was ${event.lastCommonValue.description})`;
-    return mod.updateTodo(event.relativePath, description).then(mod.renderTodos);
+    return mod.updateTodo(event.relativePath, Object.assign(event.newValue, {
+      description: `${event.oldValue.description} / ${event.newValue.description} (was ${event.lastCommonValue.description})`,
+    })).then(mod.renderTodos);
   }
 
   console.log(`Change from ${ event.origin }`, event);
