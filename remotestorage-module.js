@@ -15,9 +15,9 @@ const todos = {
 
         handle: privateClient.on,
 
-        addTodo: (description) => privateClient.storeObject('todo', `${ new Date().getTime() }`, { description }),
+        addTodo: (object) => privateClient.storeObject('todo', `${ new Date().getTime() }`, object),
 
-        updateTodo: (id, description) => privateClient.storeObject('todo', id, { description }),
+        updateTodo: (id, object) => privateClient.storeObject('todo', id, object),
 
         removeTodo: privateClient.remove.bind(privateClient),
 

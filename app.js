@@ -14,7 +14,7 @@ remoteStorage.todos.handle('change', (event) => {
   if (event.newValue && !event.oldValue) {
     console.log(`Change from ${ event.origin } (add)`, event);
 
-    return mod.displayTodo(event.relativePath, event.newValue.description);
+    return mod.displayTodo(event.relativePath, event.newValue);
   }
 
   if (!event.newValue && event.oldValue) {
@@ -26,7 +26,7 @@ remoteStorage.todos.handle('change', (event) => {
   if (event.newValue && event.oldValue) {
     console.log(`Change from ${ event.origin } (change)`, event);
 
-    if (event.origin !== 'conflict' || (event.oldValue.description === event.newValue.description)) {
+    if (event.origin !== 'conflict') {
       return mod.renderTodos();
     }
 
@@ -41,9 +41,11 @@ remoteStorage.todos.handle('change', (event) => {
 // app interface
 const mod = {
 
-  addTodo: (description) => remoteStorage.todos.addTodo(description),
+  addTodo: (description) => remoteStorage.todos.addTodo({
+    description,
+  }),
 
-  updateTodo: (id, description) => remoteStorage.todos.updateTodo(id, description),
+  updateTodo: (id, object) => remoteStorage.todos.updateTodo(id, object),
 
   removeTodo: (id) => remoteStorage.todos.removeTodo(id),
 
@@ -53,11 +55,11 @@ const mod = {
     document.querySelector('#todo-list').innerHTML = '';
 
     for (const id in todos) {
-      mod.displayTodo(id, todos[id].description);
+      mod.displayTodo(id, todos[id]);
     }
   },
 
-  displayTodo (id, description) {
+  displayTodo (id, object) {
     let li = mod.liForID(id);
 
     if (!li) {
@@ -67,7 +69,7 @@ const mod = {
     }
 
     li.innerHTML += `<form>
-      <input type="text" value="${ description }" placeholder="description">
+      <input type="text" value="${ object.description }" placeholder="description">
       <button class="save">Save</button>
       <a class="delete button" title="Delete" href="#">×</a>
     </form>`;
@@ -84,12 +86,16 @@ const mod = {
     input.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') {
         event.preventDefault();
-        mod.updateTodo(id, input.value);
+        mod.updateTodo(id, Object.assign(object, {
+          description: input.value,
+        }));
       }
     });
 
     save.addEventListener('click', () => {
-      mod.updateTodo(id, input.value);
+      mod.updateTodo(id, Object.assign(object, {
+        description: input.value,
+      }));
     });
 
     li.querySelector('a.delete').addEventListener('click', (event) => {
