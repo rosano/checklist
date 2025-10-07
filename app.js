@@ -82,7 +82,7 @@ const mod = {
 
     input.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') {
-        event.preventDefault()
+        event.preventDefault();
         mod.updateTodo(id, input.value);
       }
     });
