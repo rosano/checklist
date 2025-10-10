@@ -24,6 +24,9 @@ app {
 
   background: #222;
   padding: 20px;
+  
+  margin: 0;
+  font-size: 1.5rem;
 }
 
 h1 {
@@ -42,9 +45,9 @@ a {
   color: inherit;
 }
 
-app {
-  margin: 0;
-  font-size: 1.5rem;
+widget-wrapper {
+  display: flex;
+  justify-content: center;
 }
 
 main button, .button {
