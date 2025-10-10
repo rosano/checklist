@@ -116,7 +116,7 @@ const mod = {
 
 };
 
-// Setup after page loads
+// setup after page loads
 document.addEventListener('DOMContentLoaded', () => {
 
   (new Widget(remoteStorage)).attach('widget-wrapper');
