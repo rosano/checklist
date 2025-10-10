@@ -135,7 +135,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // hide intro if inside frame
     if (remoteStorage.remote.token && window.self !== window.top) {
-      document.querySelector('header').remove();
+      document.querySelector('header h1').remove();
+      document.querySelector('header small').remove();
     }
   });
 
