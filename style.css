@@ -47,7 +47,7 @@ app {
   font-size: 1.5rem;
 }
 
-app button, .button {
+main button, .button {
   background: #333;
   color: #fff;
   border: 1px solid #444;
@@ -56,11 +56,11 @@ app button, .button {
   transition: background 0.1s ease;
 }
 
-app button:hover, .button:hover {
+main button:hover, .button:hover {
   background: #444;
 }
 
-app input[type=text] {
+main input[type=text] {
   height: 50px;
   padding: 0.2rem 0.8rem;
   font-size: 1.5rem;
@@ -72,7 +72,7 @@ app input[type=text] {
   transition: border-color 0.3s ease;
 }
 
-app input[type=text]:focus {
+main input[type=text]:focus {
   border-color: #888;
 }
 
@@ -171,12 +171,6 @@ ul#todo-list {
   color: #fff;
 }
 
-#widget-wrapper {
-  position: absolute;
-  top: 0.5em;
-  right: 0.5em;
-}
-
 @media (max-width: 500px) {
   html {
     font-size: 12px;
@@ -202,11 +196,6 @@ ul#todo-list {
 
   #add-todo button {
     width: 100%;
-  }
-
-  #widget-wrapper {
-    top: auto;
-    right: auto;
   }
 
   #remotestorage-widget {
