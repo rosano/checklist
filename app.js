@@ -132,6 +132,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       document.querySelector('#add-todo input').value = '';
     });
+
+    // hide intro if inside frame
+    if (remoteStorage.remote.token && window.self !== window.top) {
+      document.querySelector('header').remove();
+    }
   });
 
   remoteStorage.on('disconnected', mod.emptyTodos);
