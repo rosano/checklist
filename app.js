@@ -119,7 +119,7 @@ const mod = {
 // setup after page loads
 document.addEventListener('DOMContentLoaded', () => {
 
-  (new Widget(remoteStorage)).attach('widget-wrapper');
+  (new Widget(remoteStorage)).attach(document.querySelector('widget-wrapper'));
 
   remoteStorage.on('ready', () => {
     document.getElementById('add-todo').addEventListener('submit', (event) => {
