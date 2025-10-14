@@ -41,6 +41,11 @@ small {
   display: block;
 }
 
+/* style when inside frame */
+body.embedded h1, body.embedded small {
+  display: none;
+}
+
 a {
   color: inherit;
 }
