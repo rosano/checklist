@@ -192,6 +192,10 @@ ul#todo-list {
     padding-top: 6rem;
   }
 
+  body.embedded app {
+    padding-top: 0;
+  }
+
   #add-todo {
     flex-direction: column;
     gap: 0.8rem;
