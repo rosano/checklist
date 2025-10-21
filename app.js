@@ -14,25 +14,25 @@ remoteStorage.todos.handle('change', (event) => {
   if (event.newValue && !event.oldValue) {
     console.log(`Change from ${ event.origin } (add)`, event);
 
-    return mod.displayTodo(event.relativePath, event.newValue);
+    return mod.displayItem(event.relativePath, event.newValue);
   }
 
   if (!event.newValue && event.oldValue) {
     console.log(`Change from ${ event.origin } (remove)`, event);
 
-    return mod.undisplayTodo(event.relativePath);
+    return mod.undisplayItem(event.relativePath);
   }
 
   if (event.newValue && event.oldValue) {
     console.log(`Change from ${ event.origin } (change)`, event);
 
     if (event.origin !== 'conflict') {
-      return mod.renderTodos();
+      return mod.renderItems();
     }
 
-    return mod.updateTodo(event.relativePath, Object.assign(event.newValue, {
+    return mod.updateItem(event.relativePath, Object.assign(event.newValue, {
       description: `${event.oldValue.description} / ${event.newValue.description} (was ${event.lastCommonValue.description})`,
-    })).then(mod.renderTodos);
+    })).then(mod.renderItems);
   }
 
   console.log(`Change from ${ event.origin }`, event);
@@ -41,31 +41,31 @@ remoteStorage.todos.handle('change', (event) => {
 // app interface
 const mod = {
 
-  addTodo: (description) => remoteStorage.todos.addTodo({
+  addItem: (description) => remoteStorage.todos.addTodo({
     description,
   }),
 
-  updateTodo: (id, object) => remoteStorage.todos.updateTodo(id, object),
+  updateItem: (id, object) => remoteStorage.todos.updateTodo(id, object),
 
-  removeTodo: (id) => remoteStorage.todos.removeTodo(id),
+  removeItem: (id) => remoteStorage.todos.removeTodo(id),
 
-  renderTodos: () => remoteStorage.todos.getAllTodos().then(mod.displayTodos),
+  renderItems: () => remoteStorage.todos.getAllTodos().then(mod.displayItems),
 
-  displayTodos (todos) {
-    document.querySelector('#todo-list').innerHTML = '';
+  displayItems (items) {
+    document.querySelector('#item-list').innerHTML = '';
 
-    for (const id in todos) {
-      mod.displayTodo(id, todos[id]);
+    for (const id in items) {
+      mod.displayItem(id, items[id]);
     }
   },
 
-  displayTodo (id, object) {
+  displayItem (id, object) {
     let li = mod.liForID(id);
 
     if (!li) {
       li = document.createElement('li');
       li.dataset.id = id;
-      document.querySelector('#todo-list').appendChild(li);
+      document.querySelector('#item-list').appendChild(li);
     }
 
     li.innerHTML += `<form>
@@ -86,14 +86,14 @@ const mod = {
     input.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') {
         event.preventDefault();
-        mod.updateTodo(id, Object.assign(object, {
+        mod.updateItem(id, Object.assign(object, {
           description: input.value,
         }));
       }
     });
 
     save.addEventListener('click', () => {
-      mod.updateTodo(id, Object.assign(object, {
+      mod.updateItem(id, Object.assign(object, {
         description: input.value,
       }));
     });
@@ -101,18 +101,18 @@ const mod = {
     li.querySelector('a.delete').addEventListener('click', (event) => {
       event.preventDefault();
 
-      mod.removeTodo(li.dataset.id);
+      mod.removeItem(li.dataset.id);
     });
   },
 
-  undisplayTodo: (id) => document.querySelector('#todo-list').removeChild(mod.liForID(id)),
+  undisplayItem: (id) => document.querySelector('#item-list').removeChild(mod.liForID(id)),
 
-  emptyTodos () {
-    document.querySelector('#todo-list').innerHTML = '';
-    document.querySelector('#add-todo input').value = '';
+  emptyItems () {
+    document.querySelector('#item-list').innerHTML = '';
+    document.querySelector('#add-item input').value = '';
   },
 
-  liForID: (id) => document.querySelector(`#todo-list li[data-id="${ id }"]`),
+  liForID: (id) => document.querySelector(`#item-list li[data-id="${ id }"]`),
 
 };
 
@@ -122,15 +122,15 @@ document.addEventListener('DOMContentLoaded', () => {
   (new Widget(remoteStorage)).attach(document.querySelector('widget-wrapper'));
 
   remoteStorage.on('ready', () => {
-    document.getElementById('add-todo').addEventListener('submit', (event) => {
+    document.getElementById('add-item').addEventListener('submit', (event) => {
       event.preventDefault();
 
-      const text = document.querySelector('#add-todo input').value.trim();
+      const text = document.querySelector('#add-item input').value.trim();
       if (text) {
-        mod.addTodo(text);
+        mod.addItem(text);
       }
 
-      document.querySelector('#add-todo input').value = '';
+      document.querySelector('#add-item input').value = '';
     });
 
     // hide intro if inside frame
@@ -139,6 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  remoteStorage.on('disconnected', mod.emptyTodos);
+  remoteStorage.on('disconnected', mod.emptyItems);
   
 });

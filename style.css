@@ -84,34 +84,34 @@ main input[type=text]:focus {
   border-color: #888;
 }
 
-#add-todo {
+#add-item {
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
 }
 
-#add-todo input {
+#add-item input {
   flex-grow: 1;
 }
 
-#add-todo input::placeholder {
+#add-item input::placeholder {
   color: #888;
 }
 
-#add-todo button {
+#add-item button {
   width: 100px;
   height: 50px;
   padding: 0.2rem 0.8rem;
   font-size: 1.25rem;
 }
 
-ul#todo-list {
+ul#item-list {
   list-style: none;
   padding-left: 0;
   margin-top: 2rem;
 }
 
-#todo-list li form {
+#item-list li form {
   position: relative;
   display: flex;
   flex-direction: row;
@@ -120,11 +120,11 @@ ul#todo-list {
   padding: 0.2rem 0;
 }
 
-#todo-list li:not(:last-child) {
+#item-list li:not(:last-child) {
   border-bottom: 1px solid #333;
 }
 
-#todo-list li input[type=text] {
+#item-list li input[type=text] {
   background: #222;
   border-color: #222;
   flex-grow: 1;
@@ -133,12 +133,12 @@ ul#todo-list {
   max-width: 100%;
 }
 
-#todo-list li input[type=text]:focus {
+#item-list li input[type=text]:focus {
   background: #1a1a1a;
   border-color: #888;
 }
 
-#todo-list button.save {
+#item-list button.save {
   visibility: hidden;
   flex-grow: 0;
   flex-shrink: 0;
@@ -146,7 +146,7 @@ ul#todo-list {
   font-size: 1.25rem;
 }
 
-#todo-list a.delete {
+#item-list a.delete {
   opacity: 0.5;
   width: 2rem;
   height: 2rem;
@@ -162,7 +162,7 @@ ul#todo-list {
   justify-content: center;
 }
 
-#todo-list .delete:hover {
+#item-list .delete:hover {
   opacity: 1;
 }
 
@@ -196,17 +196,17 @@ ul#todo-list {
     padding-top: 0;
   }
 
-  #add-todo {
+  #add-item {
     flex-direction: column;
     gap: 0.8rem;
     max-width: 100%;
   }
 
-  #add-todo input {
+  #add-item input {
     width: 100%;
   }
 
-  #add-todo button {
+  #add-item button {
     width: 100%;
   }
 
